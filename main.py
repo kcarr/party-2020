@@ -38,8 +38,8 @@ pygame.time.set_timer(ADDTP, 10000)
 # Instantiate player. Right now, this is just a rectangle.
 player = Player()
 
-# Crate groups to hold virus sprites and all sprites
-# - viruses is used for collision detection and position updates
+# Create groups to hold entities
+# - individual groups are used for collision detection and position updates
 # - all_sprites is used for rendering
 viruses = pygame.sprite.Group()
 masks = pygame.sprite.Group()
@@ -86,11 +86,13 @@ while running:
             masks.add(new_mask)
             all_sprites.add(new_mask)
         
+        # add TP?
         elif event.type == ADDTP:
             new_tp = ToiletPaper()
             rolls.add(new_tp)
             all_sprites.add(new_tp)
 
+        # Iterate score over time
         elif event.type == ADDSCORE:
             round_score = round_score + 1
     
@@ -126,8 +128,6 @@ while running:
     if pygame.sprite.spritecollideany(player, masks):
         mask_multiplier = mask_multiplier + 1
 
-
-
     # Adds TP score if the player got toilet paper
     if pygame.sprite.spritecollideany(player, rolls):
         toilet_paper_score = toilet_paper_score + 100000
@@ -150,5 +150,5 @@ while running:
     # Update the display
     pygame.display.flip()
 
-    # Ensure program maintains a rate of 30 frames per second
+    # Ensure program maintains a rate of 60 frames per second
     clock.tick(60)

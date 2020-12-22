@@ -18,7 +18,7 @@ from entities.entity import Entity
 # The surface drawn on the screen is now an attribute of 'player'
 class Player(Entity):
     def __init__(self):
-        Entity.__init__(self, "images/partygopher.gif", scale = (75, 75), random = False)
+        Entity.__init__(self, "images/partygopher.gif", scale = (60, 60), random = False)
     
     def update(self, pressed_keys):
         if pressed_keys[K_UP]:
