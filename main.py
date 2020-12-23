@@ -37,7 +37,7 @@ pygame.time.set_timer(ADDTP, 10000)
 GIFIFY = pygame.USEREVENT + 5
 pygame.time.set_timer(GIFIFY, 100)
 
-# Instantiate player. Right now, this is just a rectangle.
+# Instantiate player. 
 player = Player()
 
 # Create groups to hold entities
@@ -51,9 +51,8 @@ all_sprites.add(player)
 
 # Keep track of score
 score_font = pygame.font.SysFont("monospace", 16)
-mask_multiplier = 0
+mask_count = 0
 total_score = 0
-round_score = 0
 toilet_paper_score = 0
 mask_counter = 0
 
@@ -99,17 +98,15 @@ while running:
 
         # Iterate score over time
         elif event.type == ADDSCORE:
-            round_score = round_score + 1
+            total_score += 1
 
         # gifify the player
         elif event.type == GIFIFY:
+            player_image_index += 1
             player.gifify(player_image_index)
     
     # Get the set of keys pressed and check for user input
     pressed_keys = pygame.key.get_pressed()
-
-    # update player image
-    player_image_index += 1
 
     # Update positions
     masks.update()
@@ -124,38 +121,51 @@ while running:
     for entity in all_sprites:
         screen.blit(entity.surf, entity.rect)
     
-    # Draw score:
+    # Draw TP score:
     if toilet_paper_score > 0:
-        toilet_paper_text = score_font.render("OMG YOU GOT TOILET PAPER!!!!! " + str(toilet_paper_score), 1, (0, 255, 255))
-        screen.blit(toilet_paper_text, (5, const.SCREEN_HEIGHT - 60))
+        toilet_paper_upper_text = score_font.render("OMG YOU GOT TOILET PAPER!!!!!", 1, (0, 255, 255))
+        screen.blit(toilet_paper_upper_text, (5, 0))
 
-    # Draw score:
-    score_text = score_font.render("TOTAL SCORE: " + str(total_score + round_score), 1, (255, 0, 0))
-    screen.blit(score_text, (5, const.SCREEN_HEIGHT - 40))
-    # Draw score:
-    multiplier_text = score_font.render("MASK MULTIPLIER: " + str(mask_multiplier), 1, (255, 0, 0))
-    screen.blit(multiplier_text, (5, const.SCREEN_HEIGHT - 20))
+        toilet_paper_lower_text = score_font.render("TOILET PAPER SCORE: " + str(toilet_paper_score), 1, (0, 255, 255))
+        screen.blit(toilet_paper_lower_text, (5, const.SCREEN_HEIGHT - 40))
 
-    # Adds a multiplier for wearing mask
+    # Draw total score:
+    score_text = score_font.render("TOTAL SCORE: " + str(total_score), 1, (255, 0, 0))
+    screen.blit(score_text, (5, const.SCREEN_HEIGHT - 20))
+
+    # Draw mask score:
+    mask_text = score_font.render("MASKS: " + str(mask_count), 1, (255, 0, 0))
+    screen.blit(mask_text, (5, 20))
+
+    # Adds a SCORE for wearing mask
     if pygame.sprite.spritecollideany(player, masks):
-        mask_multiplier = mask_multiplier + 1
+        # remove the mask
+        pygame.sprite.spritecollideany(player, masks).kill()
+        # add to the mask count
+        mask_count += 1
+        # add to the total
+        total_score += 100
 
     # Adds TP score if the player got toilet paper
     if pygame.sprite.spritecollideany(player, rolls):
-        toilet_paper_score = toilet_paper_score + 100000
-        total_score = total_score + toilet_paper_score
+        toilet_paper_score += max(1, mask_count) * 1000
+        total_score += max(1, mask_count) * 1000
+        pygame.sprite.spritecollideany(player, rolls).kill()
     
     # Check if any viruses have collided with the player
     if pygame.sprite.spritecollideany(player, viruses):
-        # the player is safe if they're wearing a mask
-        if pygame.sprite.spritecollideany(player, masks):
-            total_score = total_score + (max(round_score, 1) * max(mask_multiplier, 1))
-            mask_multiplier = 0
-            round_score = 0
-            running = True
+        # the player is safe if they have a mask, but they lose a mask
+        if mask_count >= 1:
+            # remove the mask
+            mask_count -= 1
+
+            # remove the bonus from the mask
+            total_score -= 100
+
+            # remove the virus
+            pygame.sprite.spritecollideany(player, viruses).kill()
         else:
             # If so, then remove the player and stop the loop
-            total_score = total_score + round_score
             player.kill()
             running = False
 
