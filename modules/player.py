@@ -14,7 +14,7 @@ from pygame.locals import (
     K_ESCAPE,
 )
 
-from entities.entity import Entity
+from modules.entity import Entity
 from os import listdir
 
 # Define a Player object by extending pygame.sprite.Sprite

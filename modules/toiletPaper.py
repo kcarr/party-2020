@@ -1,5 +1,5 @@
 # Extend the entity class
-from entities.entity import Entity
+from modules.entity import Entity
 
 
 # Define the Toilet Paper object by extending entity

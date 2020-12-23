@@ -10,10 +10,10 @@ from pygame.locals import (
     QUIT,
 )
 
-from entities.player import Player
-from entities.virus import Virus
-from entities.mask import Mask
-from entities.toiletPaper import ToiletPaper
+from modules.player import Player
+from modules.virus import Virus
+from modules.mask import Mask
+from modules.toiletPaper import ToiletPaper
 from scores import Score
 
 # Setup the clock for a decent framerate
