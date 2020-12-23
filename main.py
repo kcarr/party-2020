@@ -98,7 +98,7 @@ while running:
 
         # Iterate score over time
         elif event.type == ADDSCORE:
-            total_score.amount += 1
+            total_score.update(1)
 
         # gifify the player
         elif event.type == GIFIFY:
@@ -139,22 +139,22 @@ while running:
 
     # Adds a SCORE for having a mask
     if pygame.sprite.spritecollideany(player, masks):
-        mask_count.update(player, masks, 1)
+        mask_count.update_collision(player, masks, 1)
         # add to the total
-        total_score.amount += 100
+        total_score.update(100)
 
     # Adds TP score if the player got toilet paper
     if pygame.sprite.spritecollideany(player, rolls):
-        toilet_paper_score.update(player, rolls, 1000, mask_count.amount)
-        total_score.amount += max(1, mask_count.amount) * 1000
+        toilet_paper_score.update_collision(player, rolls, 1000, mask_count.amount)
+        total_score.update(1000, mask_count.amount)
     
     # Check if any viruses have collided with the player
     if pygame.sprite.spritecollideany(player, viruses):
         # the player is safe if they have a mask, but they lose a mask
         if mask_count.amount >= 1:
-            mask_count.update(player, viruses, -1)
+            mask_count.update_collision(player, viruses, -1)
             # remove the bonus from the mask
-            total_score.amount -= 100
+            total_score.update(-100)
         else:
             # If so, then remove the player and stop the loop
             player.kill()
