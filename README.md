@@ -15,4 +15,4 @@ I also realized that the primer had everything in one big ol' file. That didn't 
 This was a fun project and I know that I'll continue tinkering with it as time goes on! I hope you enjoy it as much as I did.
 
 ## How to make it all run
-You'll need python3. And pygame. And probably some of the other packages this depends on. I'll get a better writeup soon. Anywho, I'm sure you can use your own developer awesomeness to get all the packages. Then open a terminal, go to the right folder, and run this by typing `python3 main.py`. And then enjoy!
+You'll need `python3`. And `pygame`. And probably some of the other packages this depends on. I'll get a better writeup soon, and maybe some automagical package downloading/containerizing (which will likely result in an shoutout to another awesome coworker Tim). Anywho, I'm sure you can use your own developer awesomeness to get all the packages. Then open a terminal, go to the right folder, and run this by typing `python3 main.py`. And then enjoy!
