@@ -34,6 +34,8 @@ ADDSCORE = pygame.USEREVENT + 3
 pygame.time.set_timer(ADDSCORE, 500)
 ADDTP = pygame.USEREVENT + 4
 pygame.time.set_timer(ADDTP, 10000)
+GIFIFY = pygame.USEREVENT + 5
+pygame.time.set_timer(GIFIFY, 100)
 
 # Instantiate player. Right now, this is just a rectangle.
 player = Player()
@@ -54,6 +56,9 @@ total_score = 0
 round_score = 0
 toilet_paper_score = 0
 mask_counter = 0
+
+# Use this for the proof of concept player gififying
+player_image_index = 0
 
 # Variable to keep the main loop running
 running = True
@@ -95,9 +100,16 @@ while running:
         # Iterate score over time
         elif event.type == ADDSCORE:
             round_score = round_score + 1
+
+        # gifify the player
+        elif event.type == GIFIFY:
+            player.gifify(player_image_index)
     
     # Get the set of keys pressed and check for user input
     pressed_keys = pygame.key.get_pressed()
+
+    # update player image
+    player_image_index += 1
 
     # Update positions
     masks.update()

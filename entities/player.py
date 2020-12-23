@@ -2,9 +2,11 @@
 import pygame
 import constants as const
 
+
 # Import pygame.locals for easier access to key coordinates
 # Updated to conform to flake8 and black standards
 from pygame.locals import (
+    RLEACCEL,
     K_UP,
     K_DOWN,
     K_LEFT,
@@ -13,14 +15,16 @@ from pygame.locals import (
 )
 
 from entities.entity import Entity
+from os import listdir
 
 # Define a Player object by extending pygame.sprite.Sprite
 # The surface drawn on the screen is now an attribute of 'player'
 class Player(Entity):
     def __init__(self):
-        Entity.__init__(self, "images/partygopher.gif", scale = (60, 60), random = False)
+        Entity.__init__(self, "images/party_gopher/00.png", scale = (60, 60), random = False)
     
     def update(self, pressed_keys):
+
         if pressed_keys[K_UP]:
             self.rect.move_ip(0, -5)
         if pressed_keys[K_DOWN]:
@@ -39,3 +43,17 @@ class Player(Entity):
             self.rect.top = 0
         if self.rect.bottom >= const.SCREEN_HEIGHT:
             self.rect.bottom = const.SCREEN_HEIGHT
+    
+    def gifify(self, player_image_index):
+        # gifify the party gopher
+
+        # Run gif_pre_processor.py before you do this part
+        # get the nth file
+        file_list = sorted(listdir("images/party_gopher"))
+        file_path = "images/party_gopher/" + file_list[player_image_index % len(file_list)]
+
+        # load, scale, and convert the image
+        self.surf = Entity.surf_render(self, file_path, scale = (60, 60))
+        self.surf.set_colorkey((255, 255, 255), RLEACCEL)
+
+        
