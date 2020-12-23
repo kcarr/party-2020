@@ -39,10 +39,10 @@ class Player(Entity):
             self.rect.left = 0
         if self.rect.right > const.SCREEN_WIDTH:
             self.rect.right = const.SCREEN_WIDTH
-        if self.rect.top <= 0:
-            self.rect.top = 0
-        if self.rect.bottom >= const.SCREEN_HEIGHT:
-            self.rect.bottom = const.SCREEN_HEIGHT
+        if self.rect.top <= const.TITLE_BUFFER:
+            self.rect.top = const.TITLE_BUFFER
+        if self.rect.bottom >= const.SCREEN_PLAY_HEIGHT:
+            self.rect.bottom = const.SCREEN_PLAY_HEIGHT
     
     def gifify(self, player_image_index):
         # gifify the party gopher

@@ -44,7 +44,7 @@ class Entity(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(
             center=(
                 random.randint(const.SCREEN_WIDTH + 20, const.SCREEN_WIDTH + 100),
-                random.randint(0, const.SCREEN_HEIGHT),
+                random.randint(const.TITLE_BUFFER, const.SCREEN_PLAY_HEIGHT),
             )
         )
 

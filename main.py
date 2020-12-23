@@ -16,9 +16,6 @@ from modules.mask import Mask
 from modules.toiletPaper import ToiletPaper
 from scores import Score
 
-# Setup the clock for a decent framerate
-clock = pygame.time.Clock()
-
 # Initialize pygame
 pygame.init()
 
@@ -26,17 +23,20 @@ pygame.init()
 # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
 screen = pygame.display.set_mode((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
 
+# Fill the screen with black
+screen.fill((0, 0, 0))
+
 # Create a custom event for adding a new entities
 ADDVIRUS = pygame.USEREVENT + 1
-pygame.time.set_timer(ADDVIRUS, 250)
+pygame.time.set_timer(ADDVIRUS, const.VIRUS_TIMER)
 ADDMASK = pygame.USEREVENT + 2
-pygame.time.set_timer(ADDMASK, 1000)
+pygame.time.set_timer(ADDMASK, const.MASK_TIMER)
 ADDSCORE = pygame.USEREVENT + 3
-pygame.time.set_timer(ADDSCORE, 500)
+pygame.time.set_timer(ADDSCORE, const.SCORE_TIMER)
 ADDTP = pygame.USEREVENT + 4
-pygame.time.set_timer(ADDTP, 10000)
+pygame.time.set_timer(ADDTP, const.TP_TIMER)
 GIFIFY = pygame.USEREVENT + 5
-pygame.time.set_timer(GIFIFY, 100)
+pygame.time.set_timer(GIFIFY, const.GIFIFY_TIMER)
 
 # Instantiate player. 
 player = Player()
@@ -61,6 +61,9 @@ player_image_index = 0
 
 # Variable to keep the main loop running
 running = True
+
+# Setup the clock for a decent framerate
+clock = pygame.time.Clock()
 
 # Main loop
 while running:
@@ -98,12 +101,15 @@ while running:
 
         # Iterate score over time
         elif event.type == ADDSCORE:
-            total_score.update(1)
+            total_score.update(const.SCORE_ADD)
 
         # gifify the player
         elif event.type == GIFIFY:
             player_image_index += 1
             player.gifify(player_image_index)
+    
+    # Fill the screen with black
+    screen.fill((0, 0, 0))
     
     # Get the set of keys pressed and check for user input
     pressed_keys = pygame.key.get_pressed()
@@ -113,9 +119,6 @@ while running:
     player.update(pressed_keys)
     viruses.update()
     rolls.update()
-
-    # Fill the screen with black
-    screen.fill((0, 0, 0))
 
     # Draw all sprites
     for entity in all_sprites:
@@ -141,12 +144,12 @@ while running:
     if pygame.sprite.spritecollideany(player, masks):
         mask_count.update_collision(player, masks, 1)
         # add to the total
-        total_score.update(100)
+        total_score.update(const.MASK_SCORE)
 
     # Adds TP score if the player got toilet paper
     if pygame.sprite.spritecollideany(player, rolls):
-        toilet_paper_score.update_collision(player, rolls, 1000, mask_count.amount)
-        total_score.update(1000, mask_count.amount)
+        toilet_paper_score.update_collision(player, rolls, const.TP_SCORE, mask_count.amount)
+        total_score.update(const.TP_SCORE, mask_count.amount)
     
     # Check if any viruses have collided with the player
     if pygame.sprite.spritecollideany(player, viruses):
@@ -154,7 +157,7 @@ while running:
         if mask_count.amount >= 1:
             mask_count.update_collision(player, viruses, -1)
             # remove the bonus from the mask
-            total_score.update(-100)
+            total_score.update(-const.MASK_SCORE)
         else:
             # If so, then remove the player and stop the loop
             player.kill()
