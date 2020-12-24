@@ -1,4 +1,5 @@
 # this was created and used to pre-process the partygopher gif into individual frames
+# it was adapted from Pythonic's post on extracting gif frames
 
 from PIL import Image
 

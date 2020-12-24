@@ -1,11 +1,16 @@
 # Import the pygame module
 import pygame
-import constants as const
 import random
 
 # Import pygame.locals for easier access to key coordinates
 from pygame.locals import (
     RLEACCEL,
+)
+
+from constants import (
+    SCREEN_WIDTH,
+    TITLE_BUFFER,
+    SCREEN_PLAY_HEIGHT,
 )
 
 # Define the entity object by extending pygame.sprite.Sprite
@@ -43,8 +48,8 @@ class Entity(pygame.sprite.Sprite):
     def rect_random(self):
         self.rect = self.surf.get_rect(
             center=(
-                random.randint(const.SCREEN_WIDTH + 20, const.SCREEN_WIDTH + 100),
-                random.randint(const.TITLE_BUFFER, const.SCREEN_PLAY_HEIGHT),
+                random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
+                random.randint(TITLE_BUFFER, SCREEN_PLAY_HEIGHT),
             )
         )
 

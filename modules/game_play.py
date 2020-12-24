@@ -1,20 +1,37 @@
 # Import the pygame module
 import pygame
-import constants as const
 
 # Import pygame.locals for easier access to key coordinates
 # Updated to conform to flake8 and black standards
+from enum import Enum
 from pygame.locals import (
     K_ESCAPE,
     KEYDOWN,
     QUIT,
 )
 
-from modules.player import Player
-from modules.virus import Virus
-from modules.mask import Mask
-from modules.toiletPaper import ToiletPaper
-from scores import Score
+from modules.entities.player import Player
+from modules.entities.virus import Virus
+from modules.entities.mask import Mask
+from modules.entities.toiletPaper import ToiletPaper
+from modules.scores import Score
+from constants import (
+    VIRUS_TIMER,
+    MASK_TIMER,
+    SCORE_TIMER,
+    TP_TIMER,
+    GIFIFY_TIMER,
+    TIME_SCORE,
+    SCREEN_HEIGHT,
+    MASK_SCORE,
+    TP_SCORE,
+)
+
+class GameMode(Enum):
+    #### GAME MODES ####
+    QUIT = 0
+    TITLE_SCREEN = 1
+    GAME_SCREEN = 2
 
 class GamePlay():
     def __init__(self, screen):
@@ -22,18 +39,6 @@ class GamePlay():
         screen.fill((0, 0, 0))
 
     def playing(self, screen):
-        # Create a custom event for adding a new entities
-        ADDVIRUS = pygame.USEREVENT + 1
-        pygame.time.set_timer(ADDVIRUS, const.VIRUS_TIMER)
-        ADDMASK = pygame.USEREVENT + 2
-        pygame.time.set_timer(ADDMASK, const.MASK_TIMER)
-        ADDSCORE = pygame.USEREVENT + 3
-        pygame.time.set_timer(ADDSCORE, const.SCORE_TIMER)
-        ADDTP = pygame.USEREVENT + 4
-        pygame.time.set_timer(ADDTP, const.TP_TIMER)
-        GIFIFY = pygame.USEREVENT + 5
-        pygame.time.set_timer(GIFIFY, const.GIFIFY_TIMER)
-
         # Instantiate player. 
         player = Player()
 
@@ -60,6 +65,18 @@ class GamePlay():
 
         # Setup the clock for a decent framerate
         clock = pygame.time.Clock()
+
+        # Create a custom events for adding new entities
+        ADDVIRUS = pygame.USEREVENT + 1
+        pygame.time.set_timer(ADDVIRUS, VIRUS_TIMER)
+        ADDMASK = pygame.USEREVENT + 2
+        pygame.time.set_timer(ADDMASK, MASK_TIMER)
+        ADDSCORE = pygame.USEREVENT + 3
+        pygame.time.set_timer(ADDSCORE, SCORE_TIMER)
+        ADDTP = pygame.USEREVENT + 4
+        pygame.time.set_timer(ADDTP, TP_TIMER)
+        GIFIFY = pygame.USEREVENT + 5
+        pygame.time.set_timer(GIFIFY, GIFIFY_TIMER)
 
         # Main loop
         while playGame:
@@ -97,7 +114,7 @@ class GamePlay():
 
                 # Iterate score over time
                 elif event.type == ADDSCORE:
-                    total_score.update(const.SCORE_ADD)
+                    total_score.update(TIME_SCORE)
 
                 # gifify the player
                 elif event.type == GIFIFY:
@@ -126,11 +143,11 @@ class GamePlay():
                 screen.blit(toilet_paper_upper_text, (5, 0))
 
                 toilet_paper_lower_text = score_font.render("TOILET PAPER SCORE: " + str(toilet_paper_score.amount), 1, (0, 255, 255))
-                screen.blit(toilet_paper_lower_text, (5, const.SCREEN_HEIGHT - 40))
+                screen.blit(toilet_paper_lower_text, (5, SCREEN_HEIGHT - 40))
 
             # Draw total score:
             score_text = score_font.render("TOTAL SCORE: " + str(total_score.amount), 1, (255, 0, 0))
-            screen.blit(score_text, (5, const.SCREEN_HEIGHT - 20))
+            screen.blit(score_text, (5, SCREEN_HEIGHT - 20))
 
             # Draw mask score:
             mask_text = score_font.render("MASKS: " + str(mask_count.amount), 1, (255, 0, 0))
@@ -140,12 +157,12 @@ class GamePlay():
             if pygame.sprite.spritecollideany(player, masks):
                 mask_count.update_collision(player, masks, 1)
                 # add to the total
-                total_score.update(const.MASK_SCORE)
+                total_score.update(MASK_SCORE)
 
             # Adds TP score if the player got toilet paper
             if pygame.sprite.spritecollideany(player, rolls):
-                toilet_paper_score.update_collision(player, rolls, const.TP_SCORE, mask_count.amount)
-                total_score.update(const.TP_SCORE, mask_count.amount)
+                toilet_paper_score.update_collision(player, rolls, TP_SCORE, mask_count.amount)
+                total_score.update(TP_SCORE, mask_count.amount)
             
             # Check if any viruses have collided with the player
             if pygame.sprite.spritecollideany(player, viruses):
@@ -153,7 +170,7 @@ class GamePlay():
                 if mask_count.amount >= 1:
                     mask_count.update_collision(player, viruses, -1)
                     # remove the mask bonus from the total
-                    total_score.update(-const.MASK_SCORE)
+                    total_score.update(-MASK_SCORE)
                 else:
                     # If so, then remove the player and stop the loop
                     player.kill()

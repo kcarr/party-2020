@@ -1,7 +1,5 @@
 # Import the pygame module
 import pygame
-import constants as const
-
 
 # Import pygame.locals for easier access to key coordinates
 # Updated to conform to flake8 and black standards
@@ -13,9 +11,15 @@ from pygame.locals import (
     K_RIGHT,
     K_ESCAPE,
 )
-
-from modules.entity import Entity
 from os import listdir
+
+from modules.entities.entity import Entity
+from constants import (
+    SCREEN_WIDTH,
+    TITLE_BUFFER,
+    SCREEN_PLAY_HEIGHT,
+)
+
 
 # Define a Player object by extending pygame.sprite.Sprite
 # The surface drawn on the screen is now an attribute of 'player'
@@ -37,12 +41,12 @@ class Player(Entity):
         # Keep player on the screen
         if self.rect.left < 0:
             self.rect.left = 0
-        if self.rect.right > const.SCREEN_WIDTH:
-            self.rect.right = const.SCREEN_WIDTH
-        if self.rect.top <= const.TITLE_BUFFER:
-            self.rect.top = const.TITLE_BUFFER
-        if self.rect.bottom >= const.SCREEN_PLAY_HEIGHT:
-            self.rect.bottom = const.SCREEN_PLAY_HEIGHT
+        if self.rect.right > SCREEN_WIDTH:
+            self.rect.right = SCREEN_WIDTH
+        if self.rect.top <= TITLE_BUFFER:
+            self.rect.top = TITLE_BUFFER
+        if self.rect.bottom >= SCREEN_PLAY_HEIGHT:
+            self.rect.bottom = SCREEN_PLAY_HEIGHT
     
     def gifify(self, player_image_index):
         # gifify the party gopher

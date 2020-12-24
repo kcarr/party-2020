@@ -1,10 +1,12 @@
 import pygame
-import constants as const
+from constants import (
+    TITLE_SCREEN_COLOR,
+)
 
 class TitleScreen():
     def __init__(self, screen):
         # Fill the screen with a color
-        screen.fill((0, 255, 0))
+        screen.fill(TITLE_SCREEN_COLOR)
 
         # Update the display
         pygame.display.flip()
