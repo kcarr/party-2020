@@ -1,8 +1,6 @@
 # this was created and used to pre-process the partygopher gif into individual frames
-# Reading an animated GIF file using Python Image Processing Library - Pillow
 
 from PIL import Image
-from PIL import GifImagePlugin
 
 imageObject = Image.open("images/partygopher.gif")
  
