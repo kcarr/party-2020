@@ -182,4 +182,4 @@ class GamePlay():
             # Ensure program maintains a rate of 60 frames per second
             clock.tick(60)
 
-        return total_score.amount
+        return GameMode.TITLE_SCREEN

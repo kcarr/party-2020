@@ -9,7 +9,7 @@ from pygame.rect import Rect
 class UIElement(Sprite):
     """ A user interface element that can be added to a surface """
 
-    def __init__(self, center_position, text, font_size, bg_rgb, text_rgb):
+    def __init__(self, center_position, text, font_size, bg_rgb, text_rgb, action=None):
         """
         Args:
             center_position - tuple (x, y)
@@ -18,7 +18,7 @@ class UIElement(Sprite):
             bg_rgb (background colour) - tuple (r, g, b)
             text_rgb (text colour) - tuple (r, g, b)
         """
-        self.mouse_over = False  # indicates if the mouse over the element
+        self.mouse_over = False
 
         # create the default image
         default_image = self.create_surface_with_text(
@@ -37,6 +37,8 @@ class UIElement(Sprite):
             highlighted_image.get_rect(center=center_position),
         ]
 
+        self.action = action
+
         # calls the init method of the parent sprite class
         super().__init__()
 
@@ -49,9 +51,11 @@ class UIElement(Sprite):
     def rect(self):
         return self.rects[1] if self.mouse_over else self.rects[0]
 
-    def update(self, mouse_pos):
+    def update(self, mouse_pos, mouse_up):
         if self.rect.collidepoint(mouse_pos):
             self.mouse_over = True
+            if mouse_up:
+                return self.action
         else:
             self.mouse_over = False
 
