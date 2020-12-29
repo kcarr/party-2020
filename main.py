@@ -56,6 +56,7 @@ def title_screen(screen, player=False):
         bg_rgb=TITLE_SCREEN_COLOR,
         text_rgb=TITLE_TEXT_COLOR,
         text="Party 2020!",
+        reactive=False,
     )
     # Make the start "button"
     start_button = UIElement(
