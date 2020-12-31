@@ -67,7 +67,6 @@ def title_screen(screen, player=False):
         text="START",
         action=GameMode.GAME_SCREEN,
     )
-
     # Make the quit "button"
     quit_button = UIElement(
         center_position=(400, 450),
@@ -117,13 +116,13 @@ def title_loop(screen, buttons, fill=(255,255,255)):
         for event in pygame.event.get():
             # Did the user click the window close button? If so, stop the loop
             if event.type == QUIT:
-                game_mode = GameMode.QUIT
+                return GameMode.QUIT
 
             # Did the user hit a key?
             if event.type == KEYDOWN:
                 # Was it the Escape key? If so, stop the loop.
                 if event.key == K_ESCAPE:
-                    game_mode = GameMode.QUIT
+                    return GameMode.QUIT
 
             if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 mouse_up = True
