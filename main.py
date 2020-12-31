@@ -77,8 +77,35 @@ def title_screen(screen, player=False):
         text="QUIT",
         action=GameMode.QUIT,
     )
+    # Make a description that is a "button" 
+    desc1 = UIElement(
+        center_position=(400, 525),
+        font_size=15,
+        bg_rgb=TITLE_SCREEN_COLOR,
+        text_rgb=TITLE_TEXT_COLOR,
+        text="Avoid the virus",
+        reactive=False,
+    )
+        # Make a description that is a "button" 
+    desc2 = UIElement(
+        center_position=(400, 540),
+        font_size=15,
+        bg_rgb=TITLE_SCREEN_COLOR,
+        text_rgb=TITLE_TEXT_COLOR,
+        text="Masks will save you if you're exposed to the virus",
+        reactive=False,
+    )
+        # Make a description that is a "button" 
+    desc3 = UIElement(
+        center_position=(400, 555),
+        font_size=15,
+        bg_rgb=TITLE_SCREEN_COLOR,
+        text_rgb=TITLE_TEXT_COLOR,
+        text="Catch toilet paper",
+        reactive=False,
+    )
 
-    buttons = RenderUpdates(game_title, start_button, quit_button)
+    buttons = RenderUpdates(game_title, start_button, quit_button, desc1, desc2, desc3)
 
     return title_loop(screen, buttons, fill=TITLE_SCREEN_COLOR)
 
